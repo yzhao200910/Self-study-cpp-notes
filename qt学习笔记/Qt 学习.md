@@ -310,3 +310,297 @@ QT_END_NAMESPACE
 ![11488fd99db3f888026adae804ca278](./picture/11488fd99db3f888026adae804ca278.jpg)
 
 将左边的组件拖至中间即可
+
+# 3 qt窗口类的介绍
+
+Qt 中的几个关键基类：`QWidget`, `QMainWindow`, `QDialog`, 和 `QFrame`
+
+## 3.1 QWidget
+
+**QWidget**：
+
+**特点**：
+
+- `QWidget` 是所有用户界面对象的基类。
+- **任何可以被显示的对象**都是 `QWidget` 的子类。
+- 它提供了基本的用户界面功能，可以包含其他 `QWidget` 对象。
+
+**功能**：
+
+- 它可以单独使用，也可以作为其他复杂控件的容器。
+- 支持事件处理，如鼠标点击、键盘输入等。
+- 可以设置大小、位置、可视/隐藏状态等。
+
+**使用场景：**
+
+- 创建自定义的用户界面控件。
+- 作为其他控件的容器。
+
+## 3.2 **QMainWindow**：
+
+**特点**：
+
+- `QMainWindow` 是专为主窗口设计的类，提供了一个框架，使得开发者可以添加工具栏、状态栏、以及其他常见的元素。
+- **它是 `QWidget` 的子类，但是专为主窗口应用程序设计**。
+- 允许使用停靠窗口（dockable windows）和工具栏。
+
+**功能：**
+
+- 自动管理菜单栏、工具栏、状态栏和中心窗口。
+- 支持添加停靠窗口（dock widgets）和工具条。
+- 可以很容易地通过拖放来组织工具栏和停靠窗口的布局。
+
+**使用场景**：
+
+- 构建主窗口应用程序。
+- 需要一个包含常用GUI组件的应用程序窗口。
+
+## 3.3 QDialog
+
+**特点：**
+
+- `QDialog` 是专为对话框设计的基类。
+- 通常用于执行短期任务或与用户交互。
+- 支持模态和非模态对话框。
+
+**功能**：
+
+- 支持模态（阻塞）和非模态（非阻塞）对话框。
+- 可以有返回值，通常用于表示用户的动作（如接受或拒绝）。
+- 支持添加标准按钮和自定义的界面元素。
+
+**使用场景**：
+
+- 需要从用户那里获取决定或额外信息。
+- 创建设置选项、文件选择对话框等。
+
+## 3.4 Qframe、
+
+**特点：**
+
+- `QFrame` 是一个用于包含其他 `QWidget` 对象的框架或边框。
+- 它提供了可以绘制各种样式的边框，并可以作为组织其他 `QWidget` 的容器使用。
+
+**功能**：
+
+- 提供了绘制边框的功能，可以选择不同的样式（如凹陷、凸出等）。
+- 继承自 `QWidget`，因此可以包含其他控件。
+- 用于组织界面布局，通过视觉上的分隔来增强用户体验。
+
+**使用场景**：
+
+- 组织界面布局，通过边框清晰地分割不同区域。
+- 用作其他控件的背景框架，提供视觉上的边界和组织。
+
+# 4 QT类库的概述
+
+Qt使用cpp纯手搓出来的并且扩展，引入了一些新的概念比如**信号与槽** 元对象等等
+
+**Qt Core模块是Qt类库的核心**，所有其他模块都依赖此模块。
+
+**Qt为C++语言增加了新的特性就是在Qt Core模块中实现的**，这些扩展特性由Qt的元对象系统实现的，包括信号与槽机制，属性系统，动态类型转换。
+
+## 4.1 元对象系统
+
+Qt的元对象系统（meta-object-syste）提供了对象之间通信的信号与槽机制，运行时类型信息和动态属性系统。（类似标准库中的dynamic_cats一样，运行时确定）
+
+### 4.1.1**元对象系统由三个基础组成**
+
+- QObject类是所有使用元对象系统类的基类
+- 在一个类的private部分声明Q_OBJECT宏，使得类可以使用元对象的特性，如动态属性，信号槽
+- MOC(元对象编译器)为每个QObject的子类提供必要的代码来实现元对象系统的特性。
+
+**MOC编译器的预处理阶段是将代表元对象的宏展开**，**也就是一个Cpp源文件在预处理前先用MOC编译器先进性预处理**，针对QT部分，将它预处理成额外的Cpp代码，然后这样在接下来就是常规的c++编译过程，预处理，编译，汇编和连接，最后形成可执行文件
+
+所有元对象的基类都是QObject类，它的提供了一些函数：
+
+- QObject::metaObject()函数返回类关联的元对象(动态时确定对象类型，类似于typeid)
+
+  - ```c++
+    QObject* obj = new QPushButton;//多态的使用
+    obj->metaObject()->className();//QPushButton
+    ```
+
+- QObject::inherits（）,用于查看是否是子类关系
+
+- QObject::tr()和QObject::trUtf8函数可翻译字符串，用于多语言界面设计
+
+- QObject::setProperty()和QObject::Property()函数用于通过属性的名称动态的设置和获取属性值
+
+- 对于QObject以及其子类,可以通过qobject_cast（dynamic_cast）进行切换，投影，必须是基础关系
+
+**元对象都是继承于QObject**，**它们继承基类的属性和方法**，**QObject所带来的属性和方法组成了元对象系统**，用于后续的开发，可以说是整个QT开发的基础
+
+## 4.2 属性系统
+
+### 1.属性的定义
+
+**Qt提供了一个QT_PROPERTY()宏可以定义属性**，他也是基于元对象系统实现的。Qt的属性系统与C++编译器无关，可以用任何标准的C++编译器编译定义了属性的Qt C++程序
+
+**宏的格式如下：**
+
+![db78ab1cadc3b1265eb13ab3456ea9c](./picture/db78ab1cadc3b1265eb13ab3456ea9c.jpg)
+
+**QT_PROPERTY宏定义属性的一些主要关键字的以下如下**：
+
+- READ指定一个读取属性值的函数，没有MEMBER关键字时必须设置READ。
+- WRITE指定一个设定属性值的函数，只读属性没有WRITE设置
+- MEMBER指定一个成员变量与属性关联，成为可读可写的属性，无需设置READ和WRITE
+- RESET是可选的，用于指定一个设置属性缺省值的函数
+- NOTIFY是可选的，用于设置一个信号，当属性值变化时发送此信号
+- DESIGNABLE表示属性是否在Qt Designer里可见，缺省为true
+- CONSTANT表示属性值是一个常数
+
+![ec42dcc04ebab0079a88cb4a4b8b370](./picture/ec42dcc04ebab0079a88cb4a4b8b370.jpg)
+
+**QT_PROPERTY这个宏是定义在类里面的，宏的展开，一般都是一些函数对类对象的操作或者与这个类对象有所关系的的变量**，**关于属性，无论是否有这个宏都是可以通过QObject::setProperty()和QObject::Property()函数来设置和读取**
+
+### 2.属性的使用
+
+```c++
+class MyClass : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(int myNumber READ getMyNumber WRITE setMyNumber NOTIFY myNumberChanged)
+
+public:
+    int getMyNumber() const { return m_myNumber; }
+    void setMyNumber(int number) {
+        if (m_myNumber != number) {
+            m_myNumber = number;
+            emit myNumberChanged();
+        }
+    }
+
+signals:
+    void myNumberChanged();
+
+private:
+    int m_myNumber;
+};
+
+```
+
+```c++
+MyClass obj;
+obj.setProperty("myNumber", 42); // 设置属性
+int value = obj.property("myNumber").toInt(); // 获取属性
+
+```
+
+### 3.类的附加信息
+
+属性系统还有一个宏Q_CLASSINFO()，可以为类的对象定义“名称---值”信息，如：
+
+```c++
+class myclass:public QObject{
+    Q_OBJECT
+        Q_CLASSINFO("auto","wang")
+        Q_CLASSINFO("company","UPC")
+     public:
+    	.......
+};
+```
+
+```c++
+//通过这个函数 获取一个对象，通过它的接口来知道一些信息
+QMetaClassInfo QMetaObject::classInfo(int index) const
+ //by the function value and name to get some information
+```
+
+## 4.3 信号与槽（signal and pot）
+
+信号与槽是对象之间通信的机制，也需要元对象系统支持才能实现的，利用QObject::connect()函数建立联系，类似于原生C++中的“事件——响应”（原生借助于回调函数或者信号，或者一些事件处理比如epoll）
+
+### 1：QObject::connect函数
+
+![32db7c024b9726b11a4a06ddf24fd49](./picture/32db7c024b9726b11a4a06ddf24fd49.jpg)
+
+![c568968474f5c5128700a63a76cca65](./picture/c568968474f5c5128700a63a76cca65.jpg)
+
+**个人认为使用第一种即可**
+
+**关于最后一个参数Qt::ConnectionTytpe type的默认值：**
+
+- **Qt::AutoConnection**:如果信号的接收者与发射者在同一个线程，就使用Qt::DirectConnect方式；否则使用Qt::QueuedConnection方式，在信号发射时自动确认关联方式
+- **Qt::DirectConnect**：信号被发射时槽函数立刻执行，槽函数与信号在同一线程
+- **Qt::QueuedConnection**：槽函数与信号在不同一线程，当发出信号后，槽函数所在线程在被调度则立马执行
+- **Qt::BlockingQueuedConnection**:与Qt::QueuedConnection相似，发送信号的线程必须等槽函数所在的线程，切记，信号与槽函数不要放在一个线程
+
+### **2：sender()获得信号发射者**
+
+在槽函数里，使用QObject::sender()可以获取信号发射者的指针。如果知道知道发射者的具体类型，直接动态强转即可，在使用发射者的接口函数
+
+### 3：自定义信号及其使用
+
+**在Qt中信号就是在类定义里声明的一个函数，但是这个函数无需实现，只需要发射**（emit）
+
+例子：
+
+```c++
+class myclass : public QObject{
+	Q_OBJECT
+private:
+    int m_age = 10;
+public:
+    void incAage();
+signals:
+    void ageChanged(int value);
+}
+//通过其他函数带动信号的发送
+//再利用connect将其信号与槽连接
+myclass::incAage(){
+	m_age++;
+    emit ageChanged(m_age);
+}
+```
+
+## 4.4 元对象特性测试实例
+
+#### 1：元对象测试的总结：
+
+一些心得
+
+如果自己定义的信号，是一定要绑定一个试图改变成员变量的函数或者是类外的变量
+
+在写槽函数的时候，尽可能通过sender去判断信号源，在槽函数中利用分支语句执行不同的分支体，提高槽函数的复用性
+
+巧妙使用QT_PROPERTY()和QObject::setProperty()和QObject::Property()函数来设置和读取
+
+这个测试实例，包含了属性系统，信号与槽函数的使用
+
+#### 2：QMetaObject介绍
+
+QMetaObject他的出现是为了更好的查看类的元信息，不止局限于类的成员变量或者用Q_PROPERTY()宏所定义和设置的，还有继承关系，对象树等
+
+#### 3：QObject 和 QMetaObject
+
+##### QObject
+
+- **基类**：`QObject` 是 Qt 中许多类的基类，为它们提供基本的对象功能，包括事件处理、信号和槽的机制、以及对象的父子关系管理等。
+- **信号和槽**：`QObject` 的一个核心功能是信号和槽机制，它允许对象之间进行松散耦合的通信。信号和槽机制是 Qt 事件通信的基石，极大地简化了事件驱动程序的开发。
+- **动态属性系统**：`QObject` 还支持动态属性的设置和查询，这使得在运行时可以灵活地修改和访问对象的状态。
+
+##### QMetaObject
+
+- **反射能力**：`QMetaObject` 提供了反射能力，允许程序在运行时查询对象的信息，如类名称、继承结构、可用的方法、信号、槽及属性等。这些信息可以用于动态地调用方法，连接信号和槽，以及动态创建对象。
+- **类型信息**：通过 `QMetaObject`，Qt 提供了一种机制来处理类型信息，这在与 QML 等高级特性集成时非常有用。例如，可以在 QML 中直接访问和操作 C++ 对象的属性和方法。
+- **枚举管理**：`QMetaObject` 还管理类中定义的枚举类型，使得可以在不知道具体值的情况下动态访问枚举。
+
+**QMetaObject用于属性操作的函数有以下几种**
+
+- propertyOffset(),返回类的第一个属性的序号
+- propertyCount():返回属性个数
+- QMetaProperty property(int index):返回序号为index的属性对象
+
+**总结**
+
+- QObject是所有元对象的父类，为继承的类提供很多的API，用于程序的编写
+-  QMetaObject，用于更详细的获取对象的属性，而不仅仅局限于成员变量，还有对象继承关系等
+
+## 4.5 Qt全局定义
+
+Qt中的数据类型，和原生C++差不太大
+
+**一些常用函数** 书 61
+
+**常用宏** 书 61 - 62
