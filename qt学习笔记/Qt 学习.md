@@ -599,8 +599,178 @@ QMetaObject他的出现是为了更好的查看类的元信息，不止局限于
 
 ## 4.5 Qt全局定义
 
-Qt中的数据类型，和原生C++差不太大
+### 1:Qt中的数据类型
 
-**一些常用函数** 书 61
+​	和原生C++差不太大
 
-**常用宏** 书 61 - 62
+### 2:**一些常用函数**
+
+书61
+
+### 3:**常用宏**
+
+在头文<QtGloabal头文件中定义了很多宏，常用如下 
+
+1. QT_VERSION
+
+   - 比如qt5.9.1就是0x0050901
+
+   - 宏的展开表示Qt编译器版本，这个宏常用于条件编译设置，根据Qt的版本不同，编译不同的代码段（与#if和#else使用）
+
+2. QT_VERSION_CHECK
+
+   - 这个宏展开是一个qt版本号的整数形式
+
+3. QT_VERSION_STR
+
+   - QT版本的字符串如“5.9.0”
+
+4. Q_BYTE_ORDER,Q_BIG_ENDIAN和Q_LITTLE_ENDIAN
+
+   - 第一个表示当前系统的字节序，第二个为大端字节序，最后一个是小段字节序
+
+5. Q_DECL_OVERIDE
+
+   - 在类的定义中，用于重载一个虚函数，如果你未对它重载则会报错
+
+   - ```c++
+     //exmaple：
+     //虚函数printEvent()
+     voidf printEvent(parament) Q_DEL_OVERRIDE
+     ```
+
+6. Q_DECL_FINAL
+
+   - 使用这个宏修饰的虚函数，无法被重载，这是最后一个版本
+   - 或修饰一个类，该类则无法被继承
+
+
+
+## 4.6 容器类
+
+相较于stl容器的优点：
+
+- 容器类更加轻巧，安全，易于使用
+- 进行了速度和存储的优化，减少可执行文件的大小
+- 在多线程下读是安全的，无需使用线程同步
+
+对于qt的容器类模版的T必须是可复制的的类型，即一个类必须提供有参构造，拷贝构造，拷贝复制构造
+
+QT提供了foreach可以用于遍历这些容器
+
+### 1： 顺序容器类
+
+Qt的顺序容器类有QList，QLinkedList，Qvector，Qstack和QQueue。
+
+#### 1.1 QList
+
+与list相同，但是它支持使用index去访问数据，它是基于（array-list），链表的插入与删除的效率很高
+
+常用的函数：
+
+- 添加：任意位置 insert（），追加append（）
+- 替换： replace（）
+- 删除：任意位置removeAt（），删除最前面与最后removeFirst（）and removeLast（）
+- 移动和交换：move and swap
+
+其他的一些函数与stl中差不多比如size（）和isEmpty（==empty（））
+
+#### 1.2 QLinkList
+
+QLinkList是链式链表，数据不是连续储存的，无法利用index访问，他的接口函数与上面的基本相同
+
+#### 1.3 QVector
+
+与vector一样，接口函数与QList一样
+
+#### 1.4  QStack
+
+两个常用的操作接口函数，push he pop函数
+
+#### 1.5 Queue
+
+QQueue,队列，两个常用的api enqueue（）和 dequeue（）是主要操作函数
+
+### 2：关联容器类
+
+关联容器：Qmap，QMultiMap,QHash，QMultiHash,QSet
+
+带Multi的支持一键对对多value，Qhash利用散列函数进行查找，查找速度更快
+
+#### 1:QSet
+
+QSet是基于散列表的集合模版类，储存顺序不定，查找值的速度非常快，QSet内部就是QHash实现
+
+可利用〈〈追加元素
+
+测试这个元素是否在集合内使用contains（）函数
+
+#### 2: QMap
+
+与map一样，两个常用的接口函数insert和remove用来添和删除key-value
+
+其他一些容器与stl的差不多，更倾向于stl的容器
+
+## 4.7容器的迭代
+
+stl容器的迭代，利用迭代器，或者auto x ： xxx，迭代器揭开地址后的类型就是<>里面的类型
+
+在qt中利用foreach宏可以遍历容器
+
+```c++
+//宏定义原型 foreach（variable，container）//第一个为元素的载体，第二个为容器
+QVector<string> v;
+string s;
+foreach(s,v){
+  qDebugc<<s;
+}
+
+```
+
+## 4.8 Qt类库的模块
+
+- Qt基本模块（qt Essentials):提供了Qt在所有平台上的基本功能
+- Qt附加模块（Qt Add-Ons）:实现一些特定功能的提供附加价值的模块
+- 增值模块（value-Add Modules）:单独发布的提供额外价值的模块
+
+- 技术预览模块
+
+### 1： Qt基本模块
+
+![WechatIMG150](picture/WechatIMG150.jpeg)
+
+**Qt Core 模块是Qt类库的核心**，所有其他模块都依赖于此模块，如果使用qmnake构建项目，则Qt Core模块是自动被加入项目的
+
+### 2：Qt附加模块
+
+![WechatIMG152](picture/WechatIMG152.jpeg)
+
+### 3: 技术预览模块
+
+- Qt Network Authorization 基于OAuth协议，为应用程序提供网络账号验证的功能
+- Qt Speech 提供文字转语音功能支持
+- Qt Remote Objects 进程间或设备间通信，共享QObject的API
+
+### 4 ：工具
+
+- Qt Designer 用于扩展Qt Designer的类
+- Qt Help 
+- Qt UI Tools 
+
+# 5 常用界面设计组件
+
+## 5.1 字符串与输入输出
+
+### 5.1.1字符串与数值之间的转换
+
+界面设计时使用最多的组件恐怕就是QLabel和QLineEit，前者用于显示字符串，后者用于显示和输入字符串，这两个类提供以下两个函数，来获取和设置文本信息
+
+- QString text() const
+- void setText(const QString &)
+
+**QString类从字符串转换为整数的函数有** ：
+
+```c++
+int toInt(bool *ok=Q_NULLPTR,int)
+```
+
