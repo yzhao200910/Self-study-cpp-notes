@@ -771,6 +771,45 @@ foreach(s,v){
 **QString类从字符串转换为整数的函数有** ：
 
 ```c++
-int toInt(bool *ok=Q_NULLPTR,int)
+//默认十进制
+int toInt(bool *ok=Q_NULLPTR,int base = 10) const; 
+long toLong(bool *ok=Q_NULLPTR,int base = 10) const; 
+short toshort(bool *ok=Q_NULLPTR,int base = 10) const; 
+uint toUnint(bool *ok=Q_NULLPTR,int base = 10) const; 
+ulong toULong(bool *ok=Q_NULLPTR,int base = 10) const; 
 ```
+
+**QString类从字符串转换为浮点数的函数有** ：
+
+```c++
+double toDuble(bool *ok=Q_NULLPTR) const;
+float toFlat(bool *ok=Q_NULLPTR) const;
+```
+
+```c++
+//浮点型保留位数
+//静态函数
+QString::number(total, 'f',2);
+QString::asprintf("%.2f",total);
+//类函数
+str = str.sprintf("%.2f",total);
+```
+
+**QString类提供的进制转换函数**
+
+```c++
+//n 为待转换的数字，默认转十进制
+QString	&setNum(int n , int base = 10);
+QString number(int n, int base = 10);
+```
+
+### 5.1.2 QString的常用功能
+
+QString 存储字符串采用的是Unicode码，每一个字符是一个16位的QChar,而不是8位的char，所以处理中文字符是没有问题的，一个汉字算做一个字符
+
+**QString常用的接口函数**
+
+- append ()和 prepend() 前者用于在字符串后面添加内容，如：
+- toUpper() 和toLower() 前者字符串转大写后者字符串转小写
+- count(),size()和length()都是返回字符串个数
 
