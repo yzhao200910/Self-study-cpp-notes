@@ -812,4 +812,89 @@ QString 存储字符串采用的是Unicode码，每一个字符是一个16位的
 - append ()和 prepend() 前者用于在字符串后面添加内容，如：
 - toUpper() 和toLower() 前者字符串转大写后者字符串转小写
 - count(),size()和length()都是返回字符串个数
+- trimmed() 和 simplifid()前者去掉字符串首位空格，后者用了消除字符串中的空格（像getline）
+- indexOf 和 lastIndexOf()
+
+  - ```c++
+    //indeOf 类似kmp算法，匹配字符串
+    //功能是在字符串中找str的位置，从from指定的位置开始找，最后一个指定是否区分大小写
+    int indexOf(const QString& str , int from = 0,Qt::CaseSensitivity cs = Qt::CaseSenstive)
+    ```
+
+  - lastIndexOf() 查找某个字符串最后出现的位置，如果是‘\’记得转译即可
+
+- isEmpty()用于判断字符串是否为空
+- contains 判断某个字串是否出现在字符串中
+- endWith和startsWith()前者判断是以某个字符开头后者判断是否以某个字符结尾
+- left()和right()前者是从左开始取多少个字符，后者是从右开始取多少个字符
+- section()
+
+  - ```c++
+    //功能是从字符串中提取以sep作为分隔符，从start端到end端的字符串
+    //原型如下：
+    QString section(const QString &sep, int start, int end = -1, SectionFlags flags = SectionDefault) const
+    ```
+
+    
+
+
+## 5.2 SpinBox的使用
+
+QSpinBox用于整数的显示和输入，一般显示十进制数，也可以显示二进制，十六进制的数，而且可以在显示框中增加前缀和后缀
+
+QDoubleSpinBox用于浮点数的显示和输入，可以设置显示小数的位数
+
+**QSpinBox 和 QDoubleSpinBox的主要属性**
+
+![1715825577000](picture/1715825577000.jpg)
+
+## 5.3 其他数值输入和显示组件
+
+![WechatIMG155](picture/WechatIMG155.jpeg)
+
+**QSlider：滑动条，通过滑动来设置数值，可以用于数值输入**
+
+**QScrollBar卷滚条，与QSilder功能类似，还可以用于卷滚区域**
+
+**QProgressBar：进度条，一般用于显示任务进度，可用于数值的百分比显示**
+
+**QDial：表盘式数值输入组件，通过转动表指针获得输入值**
+
+**QLCDNumber：模仿LCD数字的显示组件，可以显示整数或浮点数，显示整数时可以不同进制显示**
+
+### 5.3.1 各组件的主要功能和属性
+
+#### 1 QSlider
+
+**QSlider，QScrollBar和Qdial 这三个组件都从QAbstractslider继承而来，有一些共有属性，QSlider是滑动**
+
+基类QAbstractslider的主要属性包括以下几种：
+
+- minimum，maximum设置输入范围的最小值和最大值
+- singleStep：单步长，拖动标尺上的滑块时自动改变此值，限定在minimun和maximum之间
+- pageStep：在slider上输入焦点，按PgUp或PgDn键时变化的数值
+- value：组件当前值
+
+QSlider的独有属性
+
+- tickPostion：标尺刻度的显示位置，使用枚举类型QSlider：:TickPosition，取值如以下6种
+
+![WechatIMG154](picture/WechatIMG154.jpeg)
+
+- tickInterval：标尺刻度的间隔值，诺设置为0，会在singlestep和pagestep之间自动选择
+
+详细的看手册即可
+
+#### 2: QScrollBar
+
+从QAbstractslider继承而来，没有自己独有的属性
+
+#### 3:QDial
+
+仪表盘式的组件，通过旋转表盘获得输入值，QDial的特有的属性包括以下两种
+
+- notchesVisable：表盘的小刻度是否可见
+- notchTarget:表盘刻度间的间隔像素值
+
+#### 4:QProgressBar
 
