@@ -311,7 +311,7 @@ QT_END_NAMESPACE
 
 将左边的组件拖至中间即可
 
-# 3 qt窗口类的介绍
+# 3 qt窗口类和代理类的介绍
 
 Qt 中的几个关键基类：`QWidget`, `QMainWindow`, `QDialog`, 和 `QFrame`
 
@@ -357,24 +357,247 @@ Qt 中的几个关键基类：`QWidget`, `QMainWindow`, `QDialog`, 和 `QFrame`
 
 ## 3.3 QDialog
 
-**特点：**
+#### **特点：**
 
 - `QDialog` 是专为对话框设计的基类。
 - 通常用于执行短期任务或与用户交互。
 - 支持模态和非模态对话框。
 
-**功能**：
+#### **功能**：
 
 - 支持模态（阻塞）和非模态（非阻塞）对话框。
+
+  - ```c++
+    //模态实现
+    QDialog dlg(this);
+    dlg.exec(); // 阻塞在此
+    //第二种实现
+    QDialog* dlg = new QDialog(this);
+    dlg->setModel(true); // 设置模态
+    dlg->show();
+    ```
+  - ```c++
+    //非模态
+    QDialog* dlg = new QDialog(this);
+    ```
+
 - 可以有返回值，通常用于表示用户的动作（如接受或拒绝）。
 - 支持添加标准按钮和自定义的界面元素。
+- ```c++
+  //窗口置顶
+  MainWindow::MainWindow(QWidget *parent) :
+      QMainWindow(parent),
+      ui(new Ui::MainWindow)
+  {
+      ui->setupUi(this);
+      auto s = new QDialog(this);
+      s->setWindowFlag(Qt::WindowStaysOnTopHint);
+      s->show();
+  }
+  ```
 
-**使用场景**：
+#### **使用场景**：
 
 - 需要从用户那里获取决定或额外信息。
 - 创建设置选项、文件选择对话框等。
 
-## 3.4 Qframe、
+#### **常用的对话框**
+
+对话框的弹出一般作为槽，接受信号，做出一定的应对
+
+- ```c++
+  //颜色对话框
+  void MainWindow::on_pushButton_clicked()
+  {
+  //    QColorDialog colorDlg(Qt::blue, this);
+  //    colorDlg.setOption(QColorDialog::ShowAlphaChannel);
+  //    colorDlg.exec();
+  //    QColor color = colorDlg.currentColor();
+  //    qDebug() << "color is " << color;
+     QColor color = QColorDialog::getColor(Qt::blue, this,tr("选择颜色"), QColorDialog::ShowAlphaChannel );//创建颜色对话框并且返回选择的颜色
+      qDebug() << "color is " << color;
+  }
+  ```
+
+- ```c++
+  //文本对话框
+  //创建一个选择文件的对话框，选择后，可以根据返回值打印选择的文件的路径信息
+  void MainWindow::on_pushButton_2_clicked()
+  {
+      QString path = QDir::currentPath();//初始化默认当前的路径
+      QString title = tr("文件对话框");//选择窗口的额名称
+      QString filter = tr("文本文件(*.txt);;图片文件(*.jpg *.gif *.png);;所有文件(*.*)");//选择可匹配的文件类型
+      //创建窗口并且返回选择文件的绝对路径名称
+      QString aFileName=QFileDialog::getOpenFileName(this,title,path,filter);
+  
+      qDebug() << aFileName << endl;
+  }
+  ```
+
+- ```c++
+  //输出对话框
+  //输入对话框分几种，包括文本输入对话框，整数输入对话框，浮点数输入对话框，条目输入对话框。 先看看文本输入对话框
+  void MainWindow::on_pushButton_3_clicked()
+  {
+      bool ok = false;
+      auto text = QInputDialog::getText(this, tr("文字输入对话框"), tr("请输入用户的姓名"), QLineEdit::Normal, tr("admin"), &ok); //可以有返回值，通常用于表示用户的动作（如接受或拒绝）
+      //这里只是改变ok的值，来代替返回的用户动作
+      if(ok){
+          qDebug() << text << endl;
+      }
+  }
+  
+  //整形输入的对话框
+  void MainWindow::on_pushButton_4_clicked()
+  {
+       bool ok = false;
+      //参数解释，标题，选项，默认值，最小最大值，步长，与选择结果
+      auto intdata = QInputDialog::getInt(this,tr("数字输入对话框"),tr("请输入数字"),200,-200,400,10,&ok);
+      if(ok){
+          qDebug() << intdata << endl;
+      }
+  }
+  
+  //浮点输入对话框
+  void MainWindow::on_pushButton_5_clicked()
+  {
+      bool ok = false;
+      auto floatdata = QInputDialog::getDouble(this,tr("浮点数输入对话框"),tr("输入浮点数"),0.1,-1,1,2,&ok);
+      if(ok){
+          qDebug() << floatdata << endl;
+      }
+  }
+  //条目输入对话框，也就是一个item可以被选择，提供多个选择
+  
+  void MainWindow::on_pushButton_6_clicked()
+  {
+      QStringList items;
+      items << tr("条目1") << tr("条目2");
+      bool ok = false;
+      auto itemData = QInputDialog::getItem(this,tr("条目输入对话框"),tr("输入或选择条目"),items,0,true, &ok);
+      if(ok){
+          qDebug() << "item is " << itemData << endl;
+      }
+  }
+  
+  //提示对话框
+  //返回值作为选择的结果，用于提示的判断
+  void MainWindow::on_pushButton_7_clicked()
+  {
+      auto ret = QMessageBox::question(this,tr("提问对话框"),tr("你是单身吗"),QMessageBox::Yes, QMessageBox::No);
+      if(ret == QMessageBox::Yes || ret == QMessageBox::No){
+          qDebug() << "ret is " << ret << endl;
+      }
+  
+      auto ret2 = QMessageBox::information(this,tr("通知对话框"),tr("你好单身狗"),QMessageBox::Ok);
+      if(ret2 == QMessageBox::Ok){
+          qDebug() << "ret2 is " << ret2 << endl;
+      }
+  
+      auto ret3 = QMessageBox::warning(this,tr("警告对话框"),tr("你最好找个地方发泄一下"),QMessageBox::Ok);
+      if(ret3 == QMessageBox::Ok){
+          qDebug() << "ret3 is " << ret3 << endl;
+      }
+  
+      auto ret4 = QMessageBox::critical(this,tr("关键提示对话框"), tr("我梦寐以求是真爱和自由"),QMessageBox::Ok);
+      if(ret4 == QMessageBox::Ok){
+          qDebug() << "ret4 is " << ret4 << endl;
+      }
+  }
+  ```
+
+- ```c++
+  //进度对话框 + 定时器， 利用定时器设置定时时间发送信号配合
+  void MainWindow::on_pushButton_8_clicked()
+  {
+      //改用定时器
+      _progressDialog = new QProgressDialog(tr("正在复制"),tr("取消复制"),0,5000,this);
+      _progressDialog->setWindowTitle(tr("文件复制进度对话框"));
+      _progressDialog->setWindowModality(Qt::ApplicationModal);//设置模态的优先级，堵塞所有的窗口
+      _timer = new QTimer(this);
+      connect(_timer, &QTimer::timeout, this, &MainWindow::on_updateProgressDialog);
+      connect(_progressDialog, &QProgressDialog::canceled, this, &MainWindow::on_cancelProgressDialog);
+      _timer->start(2);
+      qDebug("复制结束");
+  }
+  //进度更新槽函数
+  void MainWindow::on_updateProgressDialog()
+  {
+      _count++;
+      if(_count > 5000){
+          _timer->stop();
+          delete  _timer;
+          _timer = nullptr;
+          delete _progressDialog;
+          _progressDialog = nullptr;
+          _count = 0;
+          return;
+      }
+  	 _progressDialog->setValue(_count);
+  }
+  ```
+
+- ```c++
+  //向导对话框,安装的向导框
+  void MainWindow::on_pushButton_10_clicked()
+  {
+      QWizard wizard(this);
+      wizard.setWindowTitle(tr("全城热恋"));//设置向导框标题
+      QWizardPage* page1 = new QWizardPage();//创建向导框的第一页
+      page1->setTitle(tr("婚恋介绍引导程序"));//第一页的标题
+      auto label1 = new QLabel();
+      label1->setText(tr("该程序帮助您找到人生伴侣"));
+      QVBoxLayout *layout = new QVBoxLayout();//垂直布局
+      layout->addWidget(label1);//添加label
+      page1->setLayout(layout);//为page1设置布局和添加组件
+      wizard.addPage(page1);//将page1添加进向导对话框中
+      QWizardPage* page2 = new QWizardPage();
+      page2->setTitle("选择心动类型");
+  
+      QButtonGroup *group = new QButtonGroup(page2);
+      QRadioButton * btn1 = new QRadioButton();
+      btn1->setText("白富美");
+      group->addButton(btn1);
+      QRadioButton * btn2 = new QRadioButton();
+      btn2->setText("萝莉");
+      group->addButton(btn2);
+      QRadioButton * btn3 = new QRadioButton();
+      btn3->setText("御姐");
+      group->addButton(btn3);
+      QRadioButton * btn4 = new QRadioButton();
+      btn4->setText("小家碧玉");
+      group->addButton(btn4);
+      QRadioButton * btn5 = new QRadioButton();
+      btn5->setText("女汉子");
+      group->addButton(btn5);
+  
+      QRadioButton * btn6 = new QRadioButton();
+      btn6->setText("成年人不做选择，全选!");
+      group->addButton(btn6);
+      QVBoxLayout *vboxLayout2 = new QVBoxLayout();
+      for(int i = 0; i < group->buttons().size(); i++){
+          vboxLayout2->addWidget(group->buttons()[i]);
+      }
+  
+      page2->setLayout(vboxLayout2);
+      wizard.addPage(page2);
+  
+      QWizardPage* page3 = new QWizardPage();
+      page3->setTitle(tr("你的缘分即将到来"));
+      auto label3 = new QLabel();
+      label3->setText(tr("感谢您的参与，接下来的一个月会遇到对的人"));
+      QVBoxLayout *layout3 = new QVBoxLayout();
+      layout3->addWidget(label3);
+      page3->setLayout(layout3);
+      wizard.addPage(page3);
+      wizard.show();
+      wizard.exec();
+  } 
+  ```
+
+  
+
+## 3.4 Qframe
 
 **特点：**
 
@@ -391,6 +614,57 @@ Qt 中的几个关键基类：`QWidget`, `QMainWindow`, `QDialog`, 和 `QFrame`
 
 - 组织界面布局，通过边框清晰地分割不同区域。
 - 用作其他控件的背景框架，提供视觉上的边界和组织。
+
+## 3.5 代理类（delegate class）
+
+### 1： 介绍
+
+关于MVC架构会在后面仔细说
+
+在Qt中，代理类（delegate class）在MVC（Model-View-Controller）架构中扮演着重要的角色。其主要目的是**用于定制和控制在视图（View）中如何显示和编辑数据模型（Model）中的数据**
+
+### 2： 意义与作用
+
+理解： 一些组件，在Qt原来的库中，就已经定义好了，但是，我们不想按部就班，想自己弄一些灵活的组件和布局，于是出现了代理类（delegate class）
+
+1. **定制显示**：**代理类允许开发者自定义数据在视图中的显示方式**。默认情况下，视图使用内置的显示方式，但通过自定义代理类，可以实现更复杂或特定需求的显示逻辑
+2. **定制编辑**：通过代理类，**开发者可以指定某一列的数据使用特定的编辑控件**，例如将布尔值显示为复选框，日期使用日期选择器等。
+3. **提高代码的可维护性**：**使用代理类将数据的显示和编辑逻辑与模型和视图分离开来，使代码更加模块化和可维护**
+4. **增强视图的功能**：代理类不仅可以自定义单个单元格的显示和编辑，还可以在需要时为整个视图增加复杂的交互功能
+5. **提供一致的用户体验**
+
+### 3： 使用
+
+```c++
+/**Qt中常用的代理类是QStyledItemDelegate，这是一个通用的代理类，适用于大多数场景。自定义代理类通常需要继承QStyledItemDelegate并重写其一些关键方法，如paint和createEditor等。例如：
+**/
+class CustomDelegate : public QStyledItemDelegate {
+    Q_OBJECT // 使用元对象系统
+
+public:
+    CustomDelegate(QObject *parent = nullptr) : QStyledItemDelegate(parent) {}
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        // 自定义绘制逻辑
+    }
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override {
+        // 返回自定义的编辑控件
+    }
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const override {
+        // 从模型数据中提取值并设置到编辑控件中
+    }
+
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override {
+        // 从编辑控件中获取值并设置到模型中
+    }
+};
+
+
+```
+
+
 
 # 4 QT类库的概述
 
@@ -759,6 +1033,8 @@ foreach(s,v){
 
 # 5 常用界面设计组件
 
+**组件用于显示，组件又是由不同定义的类组成**
+
 ## 5.1 字符串与输入输出
 
 ### 5.1.1字符串与数值之间的转换
@@ -898,3 +1174,179 @@ QSlider的独有属性
 
 #### 4:QProgressBar
 
+QProgressBar的父类是QWidget，一般用于进度显示，常用属性如下：
+
+- minimum，maximum：最小值和最大值
+- value：当前值，可以设定或读取当前值
+- textVisble：可以设置为水平或垂直方向
+- format：显示文字的格式，“%p%”显示百分比，“%v”显示当前值，“%m”显示总步数
+
+#### **5：QLCDNumber**
+
+模拟LCD显示数字的组件，可以显示整数或者小数。
+
+主要属性如下：
+
+- digitCount：显示的数的位数，如果是小数，小数也算一个数位
+
+- smallDecimalPoint：是否有小数点，如果有小数点，就可以显示小数
+
+- mode：数的显示进制，通过调用函数setDecMode(),sectBinMode(),setOctMode(),setHexMode() (分别设置十进制，二进制，八进制和16进制)
+
+- value：显示的值
+
+- intValue：返回显示的整数值
+
+- ```c++
+  //exmaple
+  digitCount = 3；//代表只能显示三位数（包括小数点），如果要减去一个小数位则默认进位
+  smallDecimalPoint = true; //可显示小数
+  value = 2.36;
+  //在这个QLCD组件上数字只会显示2.4
+  ```
+
+
+## 5.4 时间日期与定时器
+
+### 5.4.1 时间日期相关的类
+
+Qt中时间日期的类如下：
+
+- QTime：时间数据类型，仅表示时间
+- QDate：日期数据类型，仅表示日期，如2017-4-5
+- QDateTime：日期时间数据类型，如2017-03-23 08：12：43
+
+Qt中专门用于日期，时间编辑和显示的页面组件：
+
+- QTimeEdit：编辑和显示时间的组件
+- QDateEdit：编辑和显示日记的组件
+- QDateTimeEdit：编辑和显示日期时间的组件
+- QCalendarWidget：一个用日历形式选择日期的组件
+
+
+
+example：组件展示
+
+![c72ce94f6511d3ed99903ddae1013a0](./picture/c72ce94f6511d3ed99903ddae1013a0.jpg)
+
+### 5.4.2 日期时间数据与字符串之间的转换
+
+#### 1： 时间，日期编辑器属性的设置
+
+如右图有多个日期和时间组成如：QTimeEdit，QDateEdit，QDateTimeEdit等等
+
+QDateTimeEdit类的主要属性的介绍如下：
+
+- **datetime**： 日期时间
+- **date**： 日期，设置datetime时会自动改变date，设置date也会改变datetime里的值
+- **time**：时间，设置datetime会改变time，设置time也会改变datetime里的时间
+- **maximumDatetime， minimumDateTime**：最大，最小日期时间
+- **maximmDate， minmum**。。：最大最小日期
+- 。。。。time ， 。。。time：最大最小时间
+- **currentSection**：当前输入光标所在的时间日期数据段，是枚举类型QDateTimeEdit::Section,则就会在显示时间和日期是分段显示，可以通过改变，显示不同的段
+- **currentSectionIndex**：用序号表示输入光标所在的段
+- **calendearPopup**：允许弹出一个日历选择框，当取值位true，右侧的输入按钮变成与QCombox类似的下拉按钮，用于在日历上上选择日期，对QTimeEdit，此属性无效
+- **displayFormat**：显示格式，日期时间数据的显示格式，列如显示“yyyy--mm-dd:hh:mm:ss”
+
+#### 2： 日期时间数据的获取与转换为字符串
+
+利用QDateTime提供的接口函数toString,可以指定转换的格式，example：
+
+```c++
+QDateTime curDateTime = QDateTime::currentDateTime();
+ui->editTime->setText(curDateTime.toString("yyyy-mm-dd"));//指定格式
+//example
+//datetime 2016-11-12
+curDateTime.toString("yyyy年mm月dd日")、、2016年11月12日
+```
+
+```c++
+QString QDateTime::toString(const QString &format) const; //format为格式
+```
+
+//format 格式符的意义， 如下：
+
+![2e4d5eb521cecd5abaa2a2196d60312](./picture/2e4d5eb521cecd5abaa2a2196d60312.jpg)
+
+#### 3 字符串转换为日期时间
+
+函数原型，为QDateTime下的静态函数
+
+```c++
+QDateTime QDateTime::fromString(const QString &string , const QString &format);//第二个参数是字符串表示的格式
+//exmaple:
+QString str ; // 2016年12月1日
+QDateTime s = QDateTime::fromString(str, "yyyy年mm月dd日")；
+```
+
+### 5.4.3 QCaledarWidget
+
+日历组件，图中右边，他有一个信号，selectionChanged(),在日历选择的日期变化后会发射此信号，为此函数创建槽函数即可（将日期值获取再变化即可）
+
+### 5.4.4 定时器的使用              
+
+Qt中的定时器类是QTimer，它的主要属性是interval，是定时中断的周期，单位毫秒，主要信号是timeout(),在定时中断时发射信号，在定时时做出反应就要写timeout的槽函数
+
+定时器提供一下接口函数
+
+配合QTime::currentTime() 函数（获取当时时间）使用
+
+- start()：开始
+- stop()：停止
+
+## 5.5 QComboBox 和 QPlainTextEdit
+
+### 5.5.1功能介绍
+
+**QComboBox是下拉列表框组件类**，它提供了一个下拉列表供用户选择，也可以将其当作一个QLineEdit用作输入，QComboBox每一项（item）都可以与QVariant类型的变量，用于存储一些不可见的数据
+
+**QPlainTextEdit**是一个多行文本编辑器，用于显示和编辑多行简文本
+
+example：
+
+![eb78bc8b3209e627d7ff3ea5b9be9d7](./picture/eb78bc8b3209e627d7ff3ea5b9be9d7.jpg)
+
+
+
+### 5.5.2 QComboBox的使用
+
+可以通过QTdesign对组件进行添加，删除，上移，下移等操作，还可以设置图标
+
+#### 1： 为QComboBox添加项
+
+单独添加一个接口函数addItem函数
+
+```c++
+void Widget::on_btnIniTems_clicked(){
+    QIcon icon; //图标类
+    icon.addFile("图标路径");
+    ui->comboBox->clear();
+    for(int i = 0 ; i < 20; I++){
+        ui->comboBox->addItem(icon,QString::asprintf("Item %d",i));//带图标
+         ui->comboBox->addItem(QString::asprintf("Item %d",i));//不带图标
+    }
+}
+```
+
+添加多个项QStringList + addItems实现
+
+``` c++
+QStringList strList;
+str<<"date"<<"date"<<"date";
+ui->comboBox->additems(strList);
+```
+
+#### 2:添加具有用户数据的项
+
+QComboBox::addItem两个版本，原型如下：
+
+```c++
+void addItem(const QString &text, const QVariant &userData ,QVariant &userData = QVariant());
+void addItem(const QIcon &icon ，const QString &text, const QVariant &userData ,QVariant &userData = QVariant());    
+```
+
+#### 3： QComboBox列表项访问
+
+![e04294892410a7426316c5664f517cf](./picture/e04294892410a7426316c5664f517cf.jpg)
+
+​                     
