@@ -1,0 +1,5 @@
+﻿  ch1thread_test.cpp
+C:\Users\1\Desktop\c++并发编程与网络编程总结\mu_thread\mu_thread\Project1\ch1thread_test.cpp(114,37): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
+C:\Users\1\Desktop\c++并发编程与网络编程总结\mu_thread\mu_thread\Project1\ch1thread_test.cpp(151,9): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 1 拥有了类型“std::thread::id”
+C:\Users\1\Desktop\c++并发编程与网络编程总结\mu_thread\mu_thread\Project1\ch1thread_test.cpp(153,10): warning C4477: “printf”: 格式字符串“%d”需要类型“int”的参数，但可变参数 2 拥有了类型“std::thread::id”
+  Project1.vcxproj -> C:\Users\1\Desktop\c++并发编程与网络编程总结\mu_thread\mu_thread\x64\Debug\Project1.exe

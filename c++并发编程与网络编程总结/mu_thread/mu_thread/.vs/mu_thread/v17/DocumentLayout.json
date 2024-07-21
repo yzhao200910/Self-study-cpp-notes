@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_thread\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{FDEF5C91-778C-417E-B422-8832BF983E2F}|Project1\\Project1.vcxproj|C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_thread\\Project1\\ch1thread_test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{FDEF5C91-778C-417E-B422-8832BF983E2F}|Project1\\Project1.vcxproj|solutionrelative:Project1\\ch1thread_test.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ch1thread_test.cpp",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_thread\\Project1\\ch1thread_test.cpp",
+              "RelativeDocumentMoniker": "Project1\\ch1thread_test.cpp",
+              "ToolTip": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_thread\\Project1\\ch1thread_test.cpp",
+              "RelativeToolTip": "Project1\\ch1thread_test.cpp",
+              "ViewState": "AQIAAEwBAAAAAAAAAAAhwGQAAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-06-24T00:36:50.158Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
