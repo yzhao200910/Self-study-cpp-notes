@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{97BA9876-BA8F-4C3A-B98C-4F6B9F94C210}|mu_free_data_struct\\mu_free_data_struct.vcxproj|C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\No_lock_stack.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{97BA9876-BA8F-4C3A-B98C-4F6B9F94C210}|mu_free_data_struct\\mu_free_data_struct.vcxproj|solutionrelative:mu_free_data_struct\\No_lock_stack.hpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{97BA9876-BA8F-4C3A-B98C-4F6B9F94C210}|mu_free_data_struct\\mu_free_data_struct.vcxproj|C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\mu_free_data_struct.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{97BA9876-BA8F-4C3A-B98C-4F6B9F94C210}|mu_free_data_struct\\mu_free_data_struct.vcxproj|solutionrelative:mu_free_data_struct\\mu_free_data_struct.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -19,12 +23,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "No_lock_stack.hpp",
+              "DocumentMoniker": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\No_lock_stack.hpp",
+              "RelativeDocumentMoniker": "mu_free_data_struct\\No_lock_stack.hpp",
+              "ToolTip": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\No_lock_stack.hpp",
+              "RelativeToolTip": "mu_free_data_struct\\No_lock_stack.hpp",
+              "ViewState": "AQIAADMAAAAAAAAAAAAAAAQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-07-25T10:57:37.522Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "mu_free_data_struct.cpp",
               "DocumentMoniker": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\mu_free_data_struct.cpp",
               "RelativeDocumentMoniker": "mu_free_data_struct\\mu_free_data_struct.cpp",
               "ToolTip": "C:\\Users\\1\\Desktop\\c\u002B\u002B\u5E76\u53D1\u7F16\u7A0B\u4E0E\u7F51\u7EDC\u7F16\u7A0B\u603B\u7ED3\\mu_thread\\mu_free_data_struct\\mu_free_data_struct\\mu_free_data_struct.cpp",
               "RelativeToolTip": "mu_free_data_struct\\mu_free_data_struct.cpp",
-              "ViewState": "AQIAAKsAAAAAAAAAAAAywNMAAABDAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-07-17T11:27:38.946Z",
               "EditorCaption": ""

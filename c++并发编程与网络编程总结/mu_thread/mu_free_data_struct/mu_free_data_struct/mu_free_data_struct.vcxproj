@@ -129,6 +129,9 @@
   <ItemGroup>
     <ClCompile Include="mu_free_data_struct.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="No_lock_stack.hpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
